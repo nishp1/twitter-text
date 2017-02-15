@@ -1,0 +1,25 @@
+{
+  "name": "twitter-text",
+  "description": "official twitter text linkification",
+  "version": "1.14.3",
+  "main": "./js/twitter-text.js",
+  "files": [
+    "js/twitter-text.js"
+  ],
+  "homepage": "https://github.com/twitter/twitter-text-js",
+  "author": "Twitter Inc.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/twitter/twitter-text-js.git"
+  },
+  "devDependencies": {
+    "fbjs": "^0.8.9",
+    "grunt": "~0.4.2",
+    "grunt-contrib-qunit": "~0.3.0",
+    "qunitjs": "~1.13.0",
+    "uglify-js": "~2.4.3"
+  },
+  "peerDependencies": {
+    "fbjs": "^0.8.9"
+  }
+}
