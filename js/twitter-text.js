@@ -1,4 +1,6 @@
 (function() {
+  var UnicodeUtils = require('fbjs/lib/UnicodeUtils')
+
   if (typeof twttr === "undefined" || twttr === null) {
     var twttr = {};
   }
@@ -632,7 +634,7 @@
 
     for (var i = 0; i < entities.length; i++) {
       var entity = entities[i];
-      result += nonEntity(text.substring(beginIndex, entity.indices[0]));
+      result += nonEntity(UnicodeUtils.substring(text, beginIndex, entity.indices[0]));
 
       if (entity.url) {
         result += twttr.txt.linkToUrl(entity, text, options);
@@ -645,7 +647,7 @@
       }
       beginIndex = entity.indices[1];
     }
-    result += nonEntity(text.substring(beginIndex, text.length));
+    result += nonEntity(UnicodeUtils.substring(text, beginIndex, text.length));
     return result;
   };
 
