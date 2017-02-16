@@ -440,8 +440,9 @@
     }
   };
 
-  twttr.txt.linkToHashtag = function(entity, text, options) {
-    var hash = text.substring(entity.indices[0], entity.indices[0] + 1);
+  twttr.txt.linkToHashtag = function(entity, text, options, supportUnicode) {
+    supportUnicode = supportUnicode || false;
+    var hash = supportUnicode ? UnicodeUtils.substring(text, entity.indices[0], entity.indices[0] + 1) : text.substring(entity.indices[0], entity.indices[0] + 1);
     var hashtag = twttr.txt.htmlEscape(entity.hashtag);
     var attrs = clone(options.htmlAttrs || {});
     attrs.href = options.hashtagUrlBase + hashtag;
@@ -470,8 +471,9 @@
     return twttr.txt.linkToTextWithSymbol(entity, "$", cashtag, attrs, options);
   };
 
-  twttr.txt.linkToMentionAndList = function(entity, text, options) {
-    var at = text.substring(entity.indices[0], entity.indices[0] + 1);
+  twttr.txt.linkToMentionAndList = function(entity, text, options, supportUnicode) {
+    supportUnicode = supportUnicode || false;
+    var at = supportUnicode ? UnicodeUtils.substring(text, entity.indices[0], entity.indices[0] + 1) : text.substring(entity.indices[0], entity.indices[0] + 1);
     var user = twttr.txt.htmlEscape(entity.screenName);
     var slashListname = twttr.txt.htmlEscape(entity.listSlug);
     var isList = entity.listSlug && !options.suppressLists;
@@ -598,8 +600,9 @@
     return displayUrl;
   };
 
-  twttr.txt.autoLinkEntities = function(text, entities, options) {
+  twttr.txt.autoLinkEntities = function(text, entities, options, supportUnicode) {
     options = clone(options || {});
+    supportUnicode = supportUnicode || false;
 
     options.hashtagClass = options.hashtagClass || DEFAULT_HASHTAG_CLASS;
     options.hashtagUrlBase = options.hashtagUrlBase || "https://twitter.com/#!/search?q=%23";
@@ -634,7 +637,9 @@
 
     for (var i = 0; i < entities.length; i++) {
       var entity = entities[i];
-      result += nonEntity(UnicodeUtils.substring(text, beginIndex, entity.indices[0]));
+      result += nonEntity(
+        supportUnicode ? UnicodeUtils.substring(text, beginIndex, entity.indices[0]) : text.substring(beginIndex, entity.indices[0])
+      );
 
       if (entity.url) {
         result += twttr.txt.linkToUrl(entity, text, options);
@@ -647,7 +652,9 @@
       }
       beginIndex = entity.indices[1];
     }
-    result += nonEntity(UnicodeUtils.substring(text, beginIndex, text.length));
+    result += nonEntity(
+      supportUnicode ? UnicodeUtils.substring(text, beginIndex, text.length) : text.substring(beginIndex, text.length)
+    );
     return result;
   };
 
