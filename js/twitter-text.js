@@ -644,9 +644,9 @@
       if (entity.url) {
         result += twttr.txt.linkToUrl(entity, text, options);
       } else if (entity.hashtag) {
-        result += twttr.txt.linkToHashtag(entity, text, options);
+        result += twttr.txt.linkToHashtag(entity, text, options, supportUnicode);
       } else if (entity.screenName) {
-        result += twttr.txt.linkToMentionAndList(entity, text, options);
+        result += twttr.txt.linkToMentionAndList(entity, text, options, supportUnicode);
       } else if (entity.cashtag) {
         result += twttr.txt.linkToCashtag(entity, text, options);
       }
