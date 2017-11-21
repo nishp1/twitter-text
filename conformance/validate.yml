@@ -1,36 +1,43 @@
-
 tests:
   tweets:
     - description: "Valid Tweet: < 20 characters"
       text: "I am a Tweet"
       expected: true
 
-    - description: "Valid Tweet: 140 characters"
-      text: "A lie gets halfway around the world before the truth has a chance to get its pants on. Winston Churchill (1874-1965) http://bit.ly/dJpywL"
+    - description: "Valid Tweet: 280 characters"
+      text: "It is better to lead from behind and to put others in front, especially when you celebrate victory when nice things occur. You take the front line when there is danger. Then people will appreciate your leadership. Nelson Mandela (July 1918 – December 2013) http://bit.ly/1d1SdpU"
       expected: true
 
-    - description: "Valid Tweet: 140 characters (with accents)"
-      text: "A lié géts halfway arøünd thé wørld béføré thé truth has a chance tø get its pants øn. Winston Churchill (1874-1965) http://bit.ly/dJpywL"
+    - description: "Valid Tweet: 280 characters (with accents)"
+      text: "It is béttér tø léad frøm béhind and tø püt øthérs in frønt, éspécially whén yøü célébraté victøry whén nicé things øccür. Yøü také thé frønt liné whén théré is dangér. Thén péøplé will appréciaté yøür léadérship. Nelson Mandela (July 1918 – December 2013) http://bit.ly/1d1SdpU"
       expected: true
 
-    - description: "Valid Tweet: 140 characters (double byte characters)"
-      text: "のののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののの"
+    - description: "Valid Tweet: 280 characters (double byte characters)"
+      text: "のののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののののの"
       expected: true
 
-    - description: "Valid Tweet: 140 characters (double word characters)"
-      text: "\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431\U0001f431"
+    - description: "Valid Tweet: 280 characters (double word characters)"
+      text: "🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱🐱"
       expected: true
+
+    - description: "Valid Tweet: 280 characters (emoji characters)"
+      text: "👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻"
+      expected: true
+
+    - description: "Invalid Tweet: 285 characters (emoji characters)"
+      text: "👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻"
+      expected: false
 
     - description: "Invalid Tweet: no characters (empty)"
       text: ""
       expected: false
 
-    - description: "Invalid Tweet: 141 characters"
-      text: "A lie gets halfway around the world before the truth has a chance to get its pants on. -- Winston Churchill (1874-1965) http://bit.ly/dJpywL"
+    - description: "Invalid Tweet: 281 characters"
+      text: "It is better to lead from behind and to put others in front, especially when you celebrate victory when nice things occur. You take the front line when there is danger. Then people will appreciate your leadership.- Nelson Mandela (July 1918 – December 2013) http://bit.ly/1d1SdpU"
       expected: false
 
-    - description: "Invalid Tweet: 141 characters (due to newline)"
-      text: "A lie gets halfway around the world before the truth has a chance to get its pants on. \n- Winston Churchill (1874-1965) http://bit.ly/dJpywL"
+    - description: "Invalid Tweet: 281 characters (due to newline)"
+      text: "It is better to lead from behind and to put others in front, especially when you celebrate victory when nice things occur. You take the front line when there is danger. Then people will appreciate your leadership.\n Nelson Mandela (July 1918 – December 2013) http://bit.ly/1d1SdpU"
       expected: false
 
   usernames:
@@ -236,13 +243,13 @@ tests:
       expected: 86
 
     - description: "Count unicode chars outside the basic multilingual plane (double word)"
-      text: "\U00010000\U0010ffff"
-      expected: 2
+      text: "🦊🐱"
+      expected: 4
 
     - description: "Count unicode chars inside the basic multilingual plane"
       text: "저찀쯿쿿"
       expected: 4
 
-    - description: "Count a mix of single byte single word, and double word unicode characters"
-      text: "H\U0001f431☺"
-      expected: 3
+    - description: "Count a mix of single byte, single word, and double word unicode characters"
+      text: "H🐱☺"
+      expected: 5

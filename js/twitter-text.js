@@ -68,6 +68,12 @@
   twttr.txt.regexen.rtl_chars = /[\u0600-\u06FF]|[\u0750-\u077F]|[\u0590-\u05FF]|[\uFE70-\uFEFF]/mg;
   twttr.txt.regexen.non_bmp_code_pairs = /[\uD800-\uDBFF][\uDC00-\uDFFF]/mg;
 
+  // Took this from a blog post about handling emojis in js
+  // added the unicode joiner \u200D and variation selector \uFE0F
+  // https://medium.com/reactnative/emojis-in-javascript-f693d0eb79fb
+  twttr.txt.regexen.emoji_regex = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff]|\u200D|\uFE0F)/g;
+
+
   twttr.txt.regexen.latinAccentChars = /\xC0-\xD6\xD8-\xF6\xF8-\xFF\u0100-\u024F\u0253\u0254\u0256\u0257\u0259\u025B\u0263\u0268\u026F\u0272\u0289\u028B\u02BB\u0300-\u036F\u1E00-\u1EFF/;
 
   // Generated from unicode_regex/unicode_regex_groups.scala, same as objective c's \p{L}\p{M}
@@ -1002,7 +1008,28 @@
   };
 
   twttr.txt.getUnicodeTextLength = function(text) {
-    return text.replace(twttr.txt.regexen.non_bmp_code_pairs, ' ').length;
+    // This is based on the high-level description of how twitter-text 2.0 will calculate tweet length 
+    // https://developer.twitter.com/en/docs/developer-utilities/twitter-text
+    var ranges = [{ start: 0, end: 4351, weight: 1 }, { start: 8192, end: 8205, weight: 1 }, { start: 8208, end: 8223, weight: 1 }, { start: 8242, end: 8247, weight: 1 }];
+
+    var nonBmpStrings = text.match(twttr.txt.regexen.emoji_regex);
+    var bmpOnlyString = text.replace(twttr.txt.regexen.emoji_regex, "");
+    var weightedLength = bmpOnlyString.length;
+
+    if (nonBmpStrings) {
+      nonBmpStrings.forEach(function(str) {
+        var cp = str.codePointAt(0);
+        var weight = 2;
+        ranges.forEach(function(range) {
+          if (cp >= range.start && cp <= range.end) {
+            weight = range.weight;
+          }
+        });
+        weightedLength = weightedLength + weight;
+      });
+    }
+
+    return weightedLength;
   };
 
   twttr.txt.convertUnicodeIndices = function(text, entities, indicesInUTF16) {
