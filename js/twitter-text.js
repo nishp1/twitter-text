@@ -221,7 +221,7 @@
 ')(?=[^0-9a-zA-Z@]|$))'));
   twttr.txt.regexen.validPunycode = /(?:xn--[0-9a-z]+)/;
   twttr.txt.regexen.validSpecialCCTLD = /(?:(?:co|tv)(?=[^0-9a-zA-Z@]|$))/;
-  twttr.txt.regexen.validDomain = regexSupplant(/(?:#{validSubdomain}*#{validDomainName}(?:#{validGTLD}|#{validCCTLD}|#{validPunycode}))/);
+  twttr.txt.regexen.validDomain = regexSupplant(/(?:#{validSubdomain}*#{validDomainName}(?:#{validGTLD}|#{validCCTLD}|#{validPunycode}))(?!\.)/);
   twttr.txt.regexen.validAsciiDomain = regexSupplant(/(?:(?:[\-a-z0-9#{latinAccentChars}]+)\.)+(?:#{validGTLD}|#{validCCTLD}|#{validPunycode})/gi);
   twttr.txt.regexen.invalidShortDomain = regexSupplant(/^#{validDomainName}#{validCCTLD}$/i);
   twttr.txt.regexen.validSpecialShortDomain = regexSupplant(/^#{validDomainName}#{validSpecialCCTLD}$/i);
@@ -1008,7 +1008,7 @@
   };
 
   twttr.txt.getUnicodeTextLength = function(text) {
-    // This is based on the high-level description of how twitter-text 2.0 will calculate tweet length 
+    // This is based on the high-level description of how twitter-text 2.0 will calculate tweet length
     // https://developer.twitter.com/en/docs/developer-utilities/twitter-text
     var ranges = [{ start: 0, end: 4351, weight: 1 }, { start: 8192, end: 8205, weight: 1 }, { start: 8208, end: 8223, weight: 1 }, { start: 8242, end: 8247, weight: 1 }];
 
