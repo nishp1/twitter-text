@@ -208,6 +208,14 @@ tests:
       text: "http://example.com"
       expected: ["http://example.com"]
 
+    - description: "Extract a lone unicode url"
+      text: "http://ああ.com"
+      expected: ["http://ああ.com"]
+
+    - description: "Extract a lone unicode url with -"
+      text: "http://あ-あ.com"
+      expected: ["http://あ-あ.com"]
+
     - description: "Extract valid URL: http://google.com"
       text: "text http://google.com"
       expected: ["http://google.com"]
@@ -264,6 +272,10 @@ tests:
       text: "text http://✪df.ws/ejp"
       expected: ["http://✪df.ws/ejp"]
 
+    - description: "Extract valid URL: http://example.com/"
+      text: "test http://example.comだよね.comtest/hogehoge"
+      expected: ["http://example.com"]
+
     - description: "Extract valid URL: http://chilp.it/?77e8fd"
       text: "text http://chilp.it/?77e8fd"
       expected: ["http://chilp.it/?77e8fd"]
@@ -276,13 +288,9 @@ tests:
       text: "text http://msdn.microsoft.com/ja-jp/library/system.net.httpwebrequest(v=VS.100).aspx"
       expected: ["http://msdn.microsoft.com/ja-jp/library/system.net.httpwebrequest(v=VS.100).aspx"]
 
-    - description: "DO NOT extract invalid URL: http://domain-begin_dash_2314352345_dfasd.foo-cow_4352.com"
-      text: "text http://domain-dash_2314352345_dfasd.foo-cow_4352.com"
-      expected: []
-
-    - description: "DO NOT extract invalid URL: http://-begin_dash_2314352345_dfasd.foo-cow_4352.com"
-      text: "text http://-dash_2314352345_dfasd.foo-cow_4352.com"
-      expected: []
+    - description: "Extract valid URL with hyphen as query ending char: https://www.youtube.com/watch?v=LOxOAuDHzaw&list=PLPoq910Q9jXhuH6pit_KwIsck9fEz_9U-"
+      text: "text https://www.youtube.com/watch?v=LOxOAuDHzaw&list=PLPoq910Q9jXhuH6pit_KwIsck9fEz_9U-"
+      expected: ["https://www.youtube.com/watch?v=LOxOAuDHzaw&list=PLPoq910Q9jXhuH6pit_KwIsck9fEz_9U-"]
 
     - description: "DO NOT extract invalid URL: http://no-tld"
       text: "text http://no-tld"
@@ -314,7 +322,7 @@ tests:
 
     - description: "Extract URLs without protocol not on (com|org|edu|gov|net) domains"
       text: "foo.baz foo.co.jp www.xxxxxxx.baz www.foo.co.uk wwwww.xxxxxxx foo.comm foo.somecom foo.govedu foo.jp"
-      expected: ["foo.co.jp", "www.foo.co.uk"]
+      expected: ["foo.co.jp", "www.foo.co.uk", "foo.jp"]
 
     - description: "Extract URLs without protocol on ccTLD with slash"
       text: "t.co/abcde bit.ly/abcde"
@@ -331,6 +339,10 @@ tests:
     - description: "Extract URLs with longer paths ending in -"
       text: "Go to http://example.com/view/slug-url-?foo=bar"
       expected: ["http://example.com/view/slug-url-?foo=bar"]
+
+    - description: "Extract URLs with an en dash in the path"
+      text: "Go to https://en.m.wikipedia.org/wiki/Hatfield–McCoy_feud please"
+      expected: ["https://en.m.wikipedia.org/wiki/Hatfield–McCoy_feud"]
 
     - description: "Extract URLs beginning with a space"
       text: "@user Try http:// example.com/path"
@@ -352,8 +364,20 @@ tests:
       text: "Go to http://twitter.com/Русские_слова"
       expected: ["http://twitter.com/Русские_слова"]
 
-    - description: "DO NOT extract short URLs without protocol on ccTLD domains without path"
+    - description: "Extract non-ASCII host name URLs with protocol, but ignore host names bigger than 63 characters. Also handle exceptions for non-ASCII hostnames longer than 256 characters"
+      text: "http://exampleこれは日本語です.com/path/index.html http://あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ.com/path/index.html"
+      expected: ["http://exampleこれは日本語です.com/path/index.html"]
+
+    - description: "Extract short URLs without protocol on ccTLD domains without path"
       text: "twitter.jp日本語it.so中国語foo.jp it.so foo.jp"
+      expected: ["twitter.jp", "it.so", "foo.jp", "it.so", "foo.jp"]
+
+    - description: "DO NOT extract invalid URL"
+      text: "Hello http://xn--はじめよう.com/index.html"
+      expected: []
+
+    - description: "DO NOT Extract URL with domain preceeded by underscore: http://domain-begin_dash_2314352345_dfasd.foo-cow_4352.com"
+      text: "text http://domain-dash_2314352345_dfasd.foo-cow_4352.com"
       expected: []
 
     - description: "Extract some (tv|co) short URLs without protocol on ccTLD domains without path"
@@ -392,16 +416,32 @@ tests:
       text: "test http://-leadingdash.twitter.com"
       expected: []
 
+    - description: "DO NOT extract URLs containing leading dashes in the domain with a subdomain"
+      text: "test http://leadingdash.-twitter.com"
+      expected: []
+
     - description: "DO NOT extract URLs containing trailing dashes in the subdomain"
       text: "test http://trailingdash-.twitter.com"
+      expected: []
+
+    - description: "DO NOT extract URLs containing trailing dashes in the domain with a subdomain"
+      text: "test http://trailingdash.twitter-.com"
       expected: []
 
     - description: "DO NOT extract URLs containing leading underscores in the subdomain"
       text: "test http://_leadingunderscore.twitter.com"
       expected: []
 
+    - description: "DO NOT extract URLs containing leading underscores in the domain with a subdomain"
+      text: "test http://leadingunderscore._twitter.com"
+      expected: []
+
     - description: "DO NOT extract URLs containing trailing underscores in the subdomain"
       text: "test http://trailingunderscore_.twitter.com"
+      expected: []
+
+    - description: "DO NOT extract URLs containing trailing underscores in the domain with a subdomain"
+      text: "test http://trailingunderscore.twitter_.com"
       expected: []
 
     - description: "DO NOT extract URLs containing leading dashes in the domain name"
@@ -489,9 +529,21 @@ tests:
       text: "According to http://t.co/ulYGBYSo: the internet is cool"
       expected: ["http://t.co/ulYGBYSo"]
 
+    - description: "Extract a t.co URL with a long path"
+      text: "I really like http://t.co/abcdefghijklmnopqrstuvwxyz0123456789"
+      expected: ["http://t.co/abcdefghijklmnopqrstuvwxyz0123456789"]
+
+    - description: "DO NOT extract URLs with > 40 characters in a t.co slug"
+      text: "I really like http://t.co/abcdefghijklmnopqrstuvwxyz012345678901234"
+      expected: []
+
+    - description: "Extract domain followed by Japanese characters"
+      text: "example.comてすとですtwitter.みんなです"
+      expected: ["example.com", "twitter.みんな"]
+
     - description: "Extract URL before newline"
       text: "http://twitter.com\nhttp://example.com\nhttp://example.com/path\nexample.com/path\nit.so\nit.so/abcde"
-      expected: ["http://twitter.com", "http://example.com", "http://example.com/path", "example.com/path", "it.so/abcde"]
+      expected: ["http://twitter.com", "http://example.com", "http://example.com/path", "example.com/path", "it.so", "it.so/abcde"]
 
     - description: "DO NOT extract URL if preceded by $"
       text: "$http://twitter.com $twitter.com $http://t.co/abcde $t.co/abcde $t.co $TVI.CA $RBS.CA"
@@ -612,7 +664,69 @@ tests:
         - url: "http://foobar.پاکستان/"
           indices: [42, 64]
 
+  urls_with_directional_markers:
+    - description: "Extract URLs from RTL text"
+      text: "\U00002066\U0000202Atest abcdef.com پاکستان http://twitter.com/\U0000202C\U00002069"
+      expected:
+        - url: "abcdef.com"
+          indices: [7, 17]
+        - url: "http://twitter.com/"
+          indices: [26, 45]
+
+    - description: "Extract URLs from RTL text with embedded directional marks"
+      text: "This is a test \U00002066\U0000202Atwitter.com\U0000202C\U00002069 \U00002066\U0000202Ahttp://foobar.پاکستان/\U0000202C\U00002069⁩ قطر فلسطين عمان"
+      expected:
+        - url: "twitter.com"
+          indices: [17, 28]
+        - url: "http://foobar.پاکستان/"
+          indices: [33, 55]
+
+  tco_urls_with_params:
+    - description: "Extract valid URL with params: https://t.co/UqIyJAJTfo?amp=1"
+      text: "text https://t.co/UqIyJAJTfo?amp=1"
+      expected: ["https://t.co/UqIyJAJTfo?amp=1"]
+
+    - description: "Extract valid URL with params: https://t.co/UqIyJAJTfo?type=js"
+      text: "text https://t.co/UqIyJAJTfo?type=js"
+      expected: ["https://t.co/UqIyJAJTfo?type=js"]
+
+    - description: "Extract valid URL with params: https://t.co/UqIyJAJTfo?ssr=true"
+      text: "text https://t.co/UqIyJAJTfo?ssr=true"
+      expected: ["https://t.co/UqIyJAJTfo?ssr=true"]
+
+    - description: "Extract a valid URL with params: https://t.co/asdfdf?a=b#123"
+      text: "text https://t.co/asdfdf?a=b#123"
+      expected: ["https://t.co/asdfdf?a=b#123"]
+
+    - description: "Extract a valid URL with params: https://t.co/sadfasdf?a=b&c=d"
+      text: "text https://t.co/sadfasdf?a=b&c=d"
+      expected: ["https://t.co/sadfasdf?a=b&c=d"]
+
   hashtags:
+    - description: "Extract hashtag after emoji without variant selector (uFE0E or uFE0F)"
+      text: "a ✌#hashtag here"
+      expected: ["hashtag"]
+
+    - description: "Extract hashtag after emoji with variant selector FE0E"
+      text: "a ✌︎#hashtag here"
+      expected: ["hashtag"]
+
+    - description: "Extract hashtag after emoji with variant selector FE0F"
+      text: "a ✌️#hashtag here"
+      expected: ["hashtag"]
+
+    - description: "Extract hashtag after emoji with skin tone without variant selector (FE0E or FE0F)"
+      text: "a ✌🏿#hashtag here"
+      expected: ["hashtag"]
+
+    - description: "Extract hashtag after emoji with skin tone with variant selector FE0F"
+      text: "a ✌🏿️#hashtag here"
+      expected: ["hashtag"]
+
+    - description: "Extract hashtag after emoji with zero-width-joiner"
+      text: "a 👨‍👩‍👧#hashtag here"
+      expected: ["hashtag"]
+
     - description: "Extract an all-alpha hashtag"
       text: "a #hashtag here"
       expected: ["hashtag"]

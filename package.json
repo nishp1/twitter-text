@@ -1,25 +1,60 @@
 {
-  "name": "twitter-text",
-  "description": "official twitter text linkification",
-  "version": "1.14.3",
-  "main": "./js/twitter-text.js",
-  "files": [
-    "js/twitter-text.js"
-  ],
-  "homepage": "https://github.com/twitter/twitter-text-js",
-  "author": "Twitter Inc.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/twitter/twitter-text-js.git"
-  },
-  "devDependencies": {
-    "fbjs": "^0.8.9",
-    "grunt": "~0.4.2",
-    "grunt-contrib-qunit": "~0.3.0",
-    "qunitjs": "~1.13.0",
-    "uglify-js": "~2.4.3"
-  },
-  "peerDependencies": {
-    "fbjs": "^0.8.9"
+    "name": "twitter-text",
+    "description": "official twitter text linkification",
+    "version": "3.0.0",
+    "main": "./js/src/index.js",
+    "files": [
+      "js/src/index.js"
+    ],
+    "homepage": "https://github.com/twitter/twitter-text",
+    "author": "Twitter Inc.",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/twitter/twitter-text.git"
+    },
+    "devDependencies": {
+      "babel-cli": "^6.26.0",
+      "babel-core": "^6.26.0",
+      "babel-eslint": "^8.2.2",
+      "babel-plugin-add-module-exports": "^0.2.1",
+      "babel-plugin-external-helpers": "^6.22.0",
+      "babel-plugin-transform-object-rest-spread": "^6.26.0",
+      "babel-plugin-transform-runtime": "^6.23.0",
+      "babel-preset-env": "^1.6.1",
+      "eslint": "^4.18.1",
+      "eslint-config-prettier": "^2.9.0",
+      "eslint-plugin-prettier": "^2.6.0",
+      "fbjs": "^0.8.17",
+      "fs-extra": "^4.0.2",
+      "grunt": "^0.4.5",
+      "grunt-contrib-qunit": "~2.0.0",
+      "optimist": "^0.6.1",
+      "prettier": "^1.10.2",
+      "qunitjs": "^1.23.1",
+      "rimraf": "^2.6.2",
+      "rollup": "^0.49.2",
+      "rollup-plugin-babel": "^3.0.2",
+      "rollup-plugin-commonjs": "^8.2.6",
+      "rollup-plugin-json": "^2.3.0",
+      "rollup-plugin-license": "^0.5.0",
+      "rollup-plugin-node-resolve": "^3.0.0",
+      "uglify-js": "~2.4.3"
+    },
+    "scripts": {
+      "build:config": "node scripts/buildConfig.js",
+      "build:prepare": "npm run build:config && rake test:conformance:prepare",
+      "build": "rollup -c",
+      "build:watch": "npm run build -- -w",
+      "build:prod": "npm run lint:check && rimraf build && BABEL_ENV=production babel src --out-dir dist",
+      "lint:check": "eslint src rollup.config.js scripts",
+      "lint": "npm run lint:check -- --fix",
+      "prepublishOnly": "npm run build:prod",
+      "test": "npm run build && rake test && rake test:conformance"
+    },
+    "dependencies": {
+      "twemoji-parser": "^11.0.2",
+      "babel-runtime": "^6.26.0",
+      "punycode": "1.4.1"
+    }
   }
-}
+  

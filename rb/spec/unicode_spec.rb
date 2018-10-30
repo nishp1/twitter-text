@@ -1,31 +1,35 @@
+# Copyright 2018 Twitter, Inc.
+# Licensed under the Apache License, Version 2.0
+# http://www.apache.org/licenses/LICENSE-2.0
+
 # encoding: utf-8
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe Twitter::Unicode do
+describe Twitter::TwitterText::Unicode do
 
   it "should lazy-init constants" do
-    Twitter::Unicode.const_defined?(:UFEB6).should == false
-    Twitter::Unicode::UFEB6.should_not be_nil
-    Twitter::Unicode::UFEB6.should be_kind_of(String)
-    Twitter::Unicode.const_defined?(:UFEB6).should == true
+    expect(Twitter::TwitterText::Unicode.const_defined?(:UFEB6)).to eq(false)
+    expect(Twitter::TwitterText::Unicode::UFEB6).to_not be_nil
+    expect(Twitter::TwitterText::Unicode::UFEB6).to be_kind_of(String)
+    expect(Twitter::TwitterText::Unicode.const_defined?(:UFEB6)).to eq(true)
   end
 
   it "should return corresponding character" do
-    Twitter::Unicode::UFEB6.should == [0xfeb6].pack('U')
+    expect(Twitter::TwitterText::Unicode::UFEB6).to be == [0xfeb6].pack('U')
   end
 
   it "should allow lowercase notation" do
-    Twitter::Unicode::Ufeb6.should == Twitter::Unicode::UFEB6
-    Twitter::Unicode::Ufeb6.should === Twitter::Unicode::UFEB6
+    expect(Twitter::TwitterText::Unicode::Ufeb6).to be == Twitter::TwitterText::Unicode::UFEB6
+    expect(Twitter::TwitterText::Unicode::Ufeb6).to be === Twitter::TwitterText::Unicode::UFEB6
   end
 
   it "should allow underscore notation" do
-    Twitter::Unicode::U_FEB6.should == Twitter::Unicode::UFEB6
-    Twitter::Unicode::U_FEB6.should === Twitter::Unicode::UFEB6
+    expect(Twitter::TwitterText::Unicode::U_FEB6).to be == Twitter::TwitterText::Unicode::UFEB6
+    expect(Twitter::TwitterText::Unicode::U_FEB6).to be === Twitter::TwitterText::Unicode::UFEB6
   end
 
   it "should raise on invalid codepoints" do
-    lambda { Twitter::Unicode::FFFFFF }.should raise_error(NameError)
+    expect(lambda { Twitter::TwitterText::Unicode::FFFFFF }).to raise_error(NameError)
   end
 
 end
