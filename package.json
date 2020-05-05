@@ -1,7 +1,7 @@
 {
     "name": "twitter-text",
     "description": "official twitter text linkification",
-    "version": "3.0.0",
+    "version": "3.0.0-a",
     "main": "./js/src/index.js",
     "files": [
       "js/src/index.js"
