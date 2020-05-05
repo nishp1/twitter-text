@@ -6,7 +6,13 @@ import regexSupplant from './lib/regexSupplant';
 import validMentionOrList from './regexp/validMentionOrList';
 
 const VALID_LIST_RE = regexSupplant(/^#{validMentionOrList}$/, {
-  validMentionOrList
+  validMentionOrList: (() => {
+    if (typeof validMentionOrList === 'string') {
+      return validMentionOrList
+    } else {
+      return validMentionOrList()
+    }
+  })()
 });
 
 export default function(usernameList) {

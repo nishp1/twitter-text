@@ -6,14 +6,14 @@ import atSigns from './regexp/atSigns';
 import endMentionMatch from './regexp/endMentionMatch';
 import validMentionOrList from './regexp/validMentionOrList';
 
-export default function(text) {
+export default function(text, opts = undefined) {
   if (!text || !text.match(atSigns)) {
     return [];
   }
 
   const possibleNames = [];
 
-  text.replace(validMentionOrList, function(match, before, atSign, screenName, slashListname, offset, chunk) {
+  text.replace(validMentionOrList(opts), function(match, before, atSign, screenName, slashListname, offset, chunk) {
     const after = chunk.slice(offset + match.length);
     if (!after.match(endMentionMatch)) {
       slashListname = slashListname || '';
