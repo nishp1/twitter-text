@@ -3,21 +3,31 @@ require 'rubygems'
 require 'json'
 require 'fileutils'
 
-task :default => ['test:conformance:run']
+task :default => ['test:conformance:ios:run']
 task :clean => ['test:clean']
 
 namespace :test do
   namespace :conformance do
-    desc "Objective-C conformance test suite"
-    task :run => [:convert_tests] do
-      system("xctool test -scheme TwitterTextTests -project testproject/TwitterText.xcodeproj")
-      abort if $?.exitstatus != 0 # Return a non-zero exit code when tests fail. Exit code is 0 when tests succeed.
+    namespace :ios do
+      desc "Run iOS conformance test suite"
+      task :run => [:convert_tests] do
+        system("xcodebuild test -scheme TwitterText -target TwitterTextTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7'")
+        abort if $?.exitstatus != 0 # Return a non-zero exit code when tests fail. Exit code is 0 when tests succeed.
+      end
+    end
+
+    namespace :macos do
+      desc "Run macOS conformance test suite"
+      task :run => [:convert_tests] do
+        system("xcodebuild test -scheme 'TwitterText Mac' -target TwitterTextTests -sdk macosx -destination 'platform=OS X'")
+        abort if $?.exitstatus != 0 # Return a non-zero exit code when tests fail. Exit code is 0 when tests succeed.
+      end
     end
 
     desc "Convert testing data from YAML to JSON"
     task :convert_tests do
       INPUT_PATH = repo_path('../conformance/')
-      OUTPUT_PATH = repo_path('test/json-conformance/')
+      OUTPUT_PATH = repo_path('tests/json-conformance/')
 
       FILES = [
         'extract.yml',
@@ -46,8 +56,7 @@ namespace :test do
 
   desc "Clean build and tests"
   task :clean do
-    system("rm -rf testproject/build")
-    system("rm -rf test/json-conformance")
+    rm_rf ["tests/json-conformance"]
   end
 end
 
@@ -82,10 +91,10 @@ def format_tlds(tlds, max_length = 100)
 end
 
 def replace_tlds(source_code, name, tlds)
-  source_code.sub(/#{Regexp.quote('#define ' + name)}.*?#{Regexp.quote('@")"')}\n/m, <<-D)
+  source_code.sub(/#{Regexp.quote('#define ' + name)}.*?#{Regexp.quote('@")(?=[^a-z0-9@]|$))"')}\n/m, <<-D)
 #define #{name} \\
-@"(?:" \\
+@"(?:(?:" \\
 #{tlds}
-@")"
+@")(?=[^a-z0-9@]|$))"
   D
 end
